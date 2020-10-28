@@ -1,12 +1,12 @@
 <template>
   <tr>
     <td>
-      <span v-if="!judge" @click="edit()">{{ user.nickname }}</span>
+      <span v-if="!editable" @click="edit()">{{ user.nickname }}</span>
       <input
-        v-show="judge"
-        v-model="user.nickname"
-        @blur="user.editable = false"
+        v-show="editable"
         ref="editNickname"
+        v-model="user.nickname"
+        @blur="editable = false"
       />
     </td>
     <td>{{ user.email }}</td>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Vue from "vue"; // Vue.extend()を使用する為
+import Vue from "vue";
 
 export function User(nickname, email) {
   this.nickname = nickname;
