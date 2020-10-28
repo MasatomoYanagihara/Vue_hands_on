@@ -13,34 +13,33 @@
   </tr>
 </template>
 
-<script>
-import Vue from "vue";
+<script lang="ts">
+import { Component, Vue, Prop } from "vue-property-decorator";
 
-export function User(nickname, email) {
-  this.nickname = nickname;
-  this.email = email;
+export interface User {
+  nickname: string;
+  email: string;
 }
 
-export default Vue.extend({
-  props: {
-    user: {
-      type: User,
-      required: true
-    }
-  },
-  data: function() {
-    return { editable: false };
-  },
-  methods: {
-    edit: function() {
-      this.editable = true;
-      this.$nextTick(() => {
-        // DOM更新後に実行
-        this.$refs.editNickname.focus();
-      });
-    }
+@Component
+export default class UserRowComponent extends Vue {
+  @Prop({ required: true })
+  // user!の「!」はNon-null assertion operator
+  private user!: User;
+
+  // dataオプション
+  private editable = false;
+
+  // methodsオプション
+  private edit() {
+    this.editable = true;
+    this.$nextTick(() => {
+      // DOM更新後に実行
+      // as演算子による型アサーションでコンパイラに型を伝える
+      (this.$refs.editNickname as HTMLFormElement).focus();
+    });
   }
-});
+}
 </script>
 
 <style module>
